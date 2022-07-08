@@ -15,8 +15,8 @@ const posts = [
     },
     content: [
       {type: 'paragraph', content: 'Fala galeraa 👋'},
-      {type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
-      {type: 'link', content: 'jane.design/doctorcare'},
+      {type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é Fidget 🚀'},
+      {type: 'link', content: 'jane.design/fidget'},
     ],
     publishedAt: new Date('2022-07-06 20:00:00')
   },
@@ -32,7 +32,7 @@ const posts = [
       {type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
       {type: 'link', content: 'jane.design/doctorcare'},
     ],
-    publishedAt: new Date('2022-07-06 21:30:00')
+    publishedAt: new Date('2022-07-07 21:30:00')
   },
 ]
 
