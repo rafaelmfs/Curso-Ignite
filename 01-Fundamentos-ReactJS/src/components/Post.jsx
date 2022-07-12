@@ -5,6 +5,15 @@ import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
+/*
+# Programação imperativa
+O que deve ser feito (Passo-a-passo).
+
+# Programação declarativa
+Quais as condições para ter o resultado final.
+
+*/
+
 export function Post({author, content, publishedAt}){
 
   const [comments, setComments] = useState([
