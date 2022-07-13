@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow } from 'date-fns/esm';
 import ptBR from 'date-fns/esm/locale/pt-BR';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
@@ -33,12 +33,21 @@ export function Post({author, content, publishedAt}){
   function handleCreateNewComment(){
     event.preventDefault();
 
-    setComments([...comments, newCommentText])
+    setComments([...comments, newCommentText]);
     setNewCommentText('');
   }
 
   function handleNewCommentChange(){
     setNewCommentText(event.target.value);
+  }
+
+  function deleteComment(commentToDelete){
+    const commentListWhitoutOne = comments.filter((comment) => {
+      return comment !== commentToDelete;
+    });
+
+    //Imutabilidade -> As variáveis não sofrem mutação, nós criamos um novo valor.
+    setComments(commentListWhitoutOne);
   }
 
   return (
@@ -59,12 +68,11 @@ export function Post({author, content, publishedAt}){
 
       <div className={styles.content}>
         {content.map(line => {
-          if(line.type === 'paragraph') return (
-            <p>{line.content}</p>
-          )
-          else if(line.type === 'link') return (
-            <p><a href="#">{line.content}</a></p>
-          )
+          if(line.type === 'paragraph'){
+            return <p key={line.content}>{line.content}</p>
+          }else if(line.type === 'link'){
+            return <p key={line.content}><a href="#">{line.content}</a></p>
+          }
         })}
       </div>
 
@@ -84,7 +92,13 @@ export function Post({author, content, publishedAt}){
       </form>
 
       <div className={styles.commentList}>
-        {comments.map(comment => <Comment content={comment} />)}
+        {comments.map(comment => (
+          <Comment
+            key={comment}
+            content={comment}
+            onDeleteComment={deleteComment}
+          />
+        ))}
       </div>
 
     </article>
