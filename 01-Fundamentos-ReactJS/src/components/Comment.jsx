@@ -1,11 +1,21 @@
 import styles from './Comment.module.css';
 import { ThumbsUp, Trash } from 'phosphor-react';
 import { Avatar } from './Avatar';
+import { useState } from 'react';
 
 export function Comment({ content, onDeleteComment }){
 
+  const [likeCount, setLikeCount] = useState(0);
+
   function handleDeleteComment(){
     onDeleteComment(content)
+  }
+
+  function handleLikeComment(){
+    //Utilizar esse padrão sempre que quando atualizar o estado e o novo valor depende do valor anterior.
+    setLikeCount(state => {
+      return state + 1;
+    });
   }
 
   return(
@@ -27,9 +37,12 @@ export function Comment({ content, onDeleteComment }){
           <p>{content}</p>
         </div>
         <footer>
-          <button>
+          {/* Em todos os eventos do React, 'onClick, onSubmit, onChance, etc' devemos utilizar funções,
+           sem os () porque com os () estamos executando a função e isso pode causar um loop ou
+           vários outros problemas. */}
+          <button onClick={handleLikeComment}>
             <ThumbsUp />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
