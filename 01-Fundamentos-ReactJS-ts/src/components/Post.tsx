@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow } from 'date-fns/esm';
 import ptBR from 'date-fns/esm/locale/pt-BR';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
@@ -20,10 +20,15 @@ interface Author{
     role: string;
 }
 
+interface Content{
+  type: 'paragraph' | 'link';
+  content: 'string'
+}
+
 interface PostProps{
   author: Author;
   publishedAt: Date;
-  content: string;
+  content: Content[];
 }
 
 export function Post({author, content, publishedAt}: PostProps){
@@ -54,7 +59,11 @@ export function Post({author, content, publishedAt}: PostProps){
     setNewCommentText(event.target.value);
   }
 
-  function deleteComment(commentToDelete){
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
+    event.target.setCustomValidity('Este campo é obrigatório!!!');
+  }
+
+  function deleteComment(commentToDelete: string){
     const commentListWhitoutOne = comments.filter((comment) => {
       return comment !== commentToDelete;
     });
@@ -63,17 +72,13 @@ export function Post({author, content, publishedAt}: PostProps){
     setComments(commentListWhitoutOne);
   }
 
-  function handleNewCommentInvalid(){
-    event.target.setCustomValidity('Este campo é obrigatório!!!');
-  }
-
   const isNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src={author.avatarUrl} />
+          <Avatar src={author.avatarUrl}/>
           <div className={styles.authorInfo}>
             <strong>{author.name}</strong>
             <span>{author.role}</span>
