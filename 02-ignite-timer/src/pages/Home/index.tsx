@@ -37,13 +37,21 @@ const newCycleFormValidationSchema = zod.object({
   // Validando o campo minutesAmount, é um number de no mínimo 5 e no máximo 60, se o usuário preencher um número fora desse intervalo será exibida a mensagem.
 })
 
-export function Home() {
-  const { register, handleSubmit, watch, formState } = useForm({
-    resolver: zodResolver(newCycleFormValidationSchema), // é para utilizar s validações do zod no useForm e utilizar o schema que foi criado com a variável newCycleFormValidationSchema
-  })
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
-  function handleCreateNewCycle(data: any) {
+export function Home() {
+  const { register, handleSubmit, watch, reset, formState } =
+    useForm<NewCycleFormData>({
+      resolver: zodResolver(newCycleFormValidationSchema), // é para utilizar s validações do zod no useForm e utilizar o schema que foi criado com a variável newCycleFormValidationSchema
+      defaultValues: {
+        task: '',
+        minutesAmount: 0,
+      },
+    })
+
+  function handleCreateNewCycle(data: NewCycleFormData) {
     console.log(data)
+    reset()
   }
 
   console.log(formState.errors) // Essa é a forma de pegar os erros de validação do formulário, tem um objeto chamado formState e nele tem um atributo chamado errors.
