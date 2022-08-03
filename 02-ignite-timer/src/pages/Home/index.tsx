@@ -12,6 +12,7 @@ import {
   StartCountdownButton,
   TaskInput,
 } from './styles'
+import { useEffect, useState } from 'react'
 
 /* Formulário controlled / uncontrolled
 Controlled: é quando utiliza um estado para ir atualizando a cada modificação no input,
@@ -39,7 +40,17 @@ const newCycleFormValidationSchema = zod.object({
 
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
+interface Cycle {
+  id: string
+  task: string
+  minutesAmount: number
+}
+
 export function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+  const [amountSecondsPassed, setAmoundSecondsPassed] = useState(0)
+
   const { register, handleSubmit, watch, reset, formState } =
     useForm<NewCycleFormData>({
       resolver: zodResolver(newCycleFormValidationSchema), // é para utilizar s validações do zod no useForm e utilizar o schema que foi criado com a variável newCycleFormValidationSchema
@@ -50,13 +61,39 @@ export function Home() {
     })
 
   function handleCreateNewCycle(data: NewCycleFormData) {
-    console.log(data)
+    const id = String(new Date().getTime()) // É retornado o time value em milisegundos
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setCycles((state) => [...state, newCycle]) // Sempre que atualizar o estado e ele necessita do valor anterior, é melhor utilizar o formato de arrow.
+    setActiveCycleId(id)
     reset()
   }
 
+  // function time() {
+  //   setInterval(() => {
+  //     setAmoundSecondsPassed((state) => state + 1)
+  //   }, 1000)
+  // }
+
   console.log(formState.errors) // Essa é a forma de pegar os erros de validação do formulário, tem um objeto chamado formState e nele tem um atributo chamado errors.
+
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0 // Essa variavel está guardando o total de segundos, no caso do input pegamos o valor por minutos e aqui estamos convertendo tudo para segundos.
+  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0 // Essa variável está guardado a quantidade de segundos que sobraram, ele faz um calculo do total de segundos subtraindo pela quantidade de segundos que já passaram.
+
+  const minutesAmount = Math.floor(totalSeconds / 60) // Vai converter os segundos para minutos minutos arredondando para baixo para pegar sempre um número inteiro.
+  const secondsAmount = currentSeconds % 60 // O resto dos segundos que sobraram.
+
+  const minutes = String(minutesAmount).padStart(2, '0') // O método padStart vai preencher a string com os caracteres faltantes para inteirar o tamanho informado.
+  const seconds = String(secondsAmount).padStart(2, '0') // O método padStart vai preencher a string com os caracteres faltantes para inteirar o tamanho informado.
+
   const task = watch('task')
-  const isSubmitDisabled = !task
+  const isSubmitDisabled = !task // Variável de controle para desabilitar o botão
 
   return (
     <HomeContainer>
@@ -90,11 +127,11 @@ export function Home() {
         </FormContainer>
 
         <CountdownContainer>
-          <span>0</span>
-          <span>0</span>
+          <span>{minutes[0]}</span>
+          <span>{minutes[1]}</span>
           <Separator>:</Separator>
-          <span>0</span>
-          <span>0</span>
+          <span>{seconds[0]}</span>
+          <span>{seconds[1]}</span>
         </CountdownContainer>
 
         <StartCountdownButton type="submit" disabled={isSubmitDisabled}>
