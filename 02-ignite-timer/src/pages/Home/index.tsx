@@ -13,6 +13,7 @@ import {
   TaskInput,
 } from './styles'
 import { useEffect, useState } from 'react'
+import { differenceInSeconds } from 'date-fns'
 
 /* Formulário controlled / uncontrolled
 Controlled: é quando utiliza um estado para ir atualizando a cada modificação no input,
@@ -44,12 +45,13 @@ interface Cycle {
   id: string
   task: string
   minutesAmount: number
+  startDate: Date
 }
 
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-  const [amountSecondsPassed, setAmoundSecondsPassed] = useState(0)
+  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
 
   const { register, handleSubmit, watch, reset, formState } =
     useForm<NewCycleFormData>({
@@ -60,37 +62,54 @@ export function Home() {
       },
     })
 
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  useEffect(() => {
+    let interval: number
+    if (activeCycle) {
+      interval = setInterval(() => {
+        setAmountSecondsPassed(
+          differenceInSeconds(new Date(), activeCycle.startDate), // A diferença está sendo validada comparando a data atual e a data de início, sempre colocando a data mais atual primeiro nos parametros da função differenceIn
+        )
+      }, 1000) // Não utilizar o contador do setInterval pois não é preciso, isso é uma estimativa e pode acontecer de não se passar 1 segundo.
+    }
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [activeCycle])
+
   function handleCreateNewCycle(data: NewCycleFormData) {
     const id = String(new Date().getTime()) // É retornado o time value em milisegundos
     const newCycle: Cycle = {
       id,
       task: data.task,
       minutesAmount: data.minutesAmount,
+      startDate: new Date(),
     }
 
     setCycles((state) => [...state, newCycle]) // Sempre que atualizar o estado e ele necessita do valor anterior, é melhor utilizar o formato de arrow.
     setActiveCycleId(id)
+    setAmountSecondsPassed(0)
     reset()
   }
 
-  // function time() {
-  //   setInterval(() => {
-  //     setAmoundSecondsPassed((state) => state + 1)
-  //   }, 1000)
-  // }
-
   console.log(formState.errors) // Essa é a forma de pegar os erros de validação do formulário, tem um objeto chamado formState e nele tem um atributo chamado errors.
-
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0 // Essa variavel está guardando o total de segundos, no caso do input pegamos o valor por minutos e aqui estamos convertendo tudo para segundos.
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0 // Essa variável está guardado a quantidade de segundos que sobraram, ele faz um calculo do total de segundos subtraindo pela quantidade de segundos que já passaram.
 
-  const minutesAmount = Math.floor(totalSeconds / 60) // Vai converter os segundos para minutos minutos arredondando para baixo para pegar sempre um número inteiro.
+  const minutesAmount = Math.floor(currentSeconds / 60) // Vai converter os segundos para minutos minutos arredondando para baixo para pegar sempre um número inteiro.
   const secondsAmount = currentSeconds % 60 // O resto dos segundos que sobraram.
 
   const minutes = String(minutesAmount).padStart(2, '0') // O método padStart vai preencher a string com os caracteres faltantes para inteirar o tamanho informado.
   const seconds = String(secondsAmount).padStart(2, '0') // O método padStart vai preencher a string com os caracteres faltantes para inteirar o tamanho informado.
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutes}:${seconds}`
+    }
+  }, [minutes, seconds, activeCycle])
 
   const task = watch('task')
   const isSubmitDisabled = !task // Variável de controle para desabilitar o botão
