@@ -51,9 +51,10 @@ export function Home() {
     },
   })
 
+  // eslint-disable-next-line no-unused-vars
   const { handleSubmit, watch, reset, formState } = newCycleForm
 
-  console.log(formState.errors) // Essa é a forma de pegar os erros de validação do formulário, tem um objeto chamado formState e nele tem um atributo chamado errors.
+  // console.log(formState.errors) // Essa é a forma de pegar os erros de validação do formulário, tem um objeto chamado formState e nele tem um atributo chamado errors.
 
   const task = watch('task')
   const isSubmitDisabled = !task // Variável de controle para desabilitar o botão
