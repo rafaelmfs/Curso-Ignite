@@ -37,7 +37,7 @@ export function Countdown() {
         // A diferença está sendo validada comparando a data atual e a data de início, sempre colocando a data mais atual primeiro nos parametros da função differenceIn
         const secondsDifference = differenceInSeconds(
           new Date(),
-          activeCycle.startDate,
+          new Date(activeCycle.startDate),
         )
         if (secondsDifference >= totalSeconds) {
           markCurrentCycleAsFinished()
