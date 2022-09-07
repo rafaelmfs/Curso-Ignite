@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.7",
+    "date-fns": "^2.29.1",
+    "immer": "^9.0.15",
+    "react-hook-form": "^7.34.0",
+    "zod": "^3.17.10"
+  }
+}
