@@ -1,0 +1,52 @@
+{
+  "transactions": [
+    {
+      "id": 1,
+      "description": "Desenvolvimento de site",
+      "type": "income",
+      "price": 14000,
+      "category": "venda",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "id": 2,
+      "description": "Almoço",
+      "type": "outcome",
+      "price": 25,
+      "category": "alimentação",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "id": 3,
+      "description": "Vendi meu pc",
+      "type": "income",
+      "price": 22000,
+      "category": "venda",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "id": 4,
+      "description": "Salário do mês",
+      "type": "income",
+      "price": 4000,
+      "category": "trabalho",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "id": 5,
+      "description": "Hamburger",
+      "type": "outcome",
+      "price": 2000,
+      "category": "alimentação",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "id": 6,
+      "description": "Pastel",
+      "type": "outcome",
+      "price": 5000,
+      "category": "alimentação",
+      "createdAt": "2022-10-06T01:19:45.996Z"
+    }
+  ]
+}
