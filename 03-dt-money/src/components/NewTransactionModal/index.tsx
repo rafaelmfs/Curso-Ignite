@@ -20,7 +20,11 @@ const newTransactionFormSchema = z.object({
 
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
-export function NewTransactionModal() {
+interface NewTransactionModalProps {
+  showModal: (open: boolean) => void
+}
+
+export function NewTransactionModal({ showModal }: NewTransactionModalProps) {
   const {
     control,
     register,
@@ -30,7 +34,11 @@ export function NewTransactionModal() {
     resolver: zodResolver(newTransactionFormSchema),
   })
 
-  async function handleCreateNewTransaction(data: NewTransactionFormInputs) {}
+  async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    showModal(false)
+  }
 
   return (
     <Dialog.Portal>
