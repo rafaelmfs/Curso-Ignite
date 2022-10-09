@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { SearchFormContainer } from './styles'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { TransactionsContext } from '../../../contexts/transactionsContext'
+import { useContextSelector } from 'use-context-selector'
 
 const searchFormSchema = z.object({
   query: z.string(),
@@ -11,6 +13,13 @@ const searchFormSchema = z.object({
 type SearchFormInput = z.infer<typeof searchFormSchema>
 
 export function SearchForm() {
+  const fetchTransactions = useContextSelector(
+    TransactionsContext,
+    (context) => {
+      return context.fetchTransactions
+    },
+  )
+
   const {
     register,
     handleSubmit,
@@ -20,8 +29,7 @@ export function SearchForm() {
   })
 
   async function handleSearchTransactions(data: SearchFormInput) {
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log(data)
+    await fetchTransactions(data.query)
   }
 
   return (
@@ -39,3 +47,7 @@ export function SearchForm() {
     </SearchFormContainer>
   )
 }
+// Cuidado ao utilizar o MEMO, ele só vai fazer o componente renderizar se alguma prop ou hook mudar,
+// Essa comparação pode ser mais lenta do que a comparação do HTML, o ideal é utilizar ela somente se o HTML for muito grande.
+// Não utilizar em componentes simples, que é o caso deste.
+// export const SearchForm = memo(SearchFormComponent)

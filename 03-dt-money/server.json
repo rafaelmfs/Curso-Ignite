@@ -47,6 +47,46 @@
       "price": 5000,
       "category": "alimentação",
       "createdAt": "2022-10-06T01:19:45.996Z"
+    },
+    {
+      "description": "Desenvolvimento de app",
+      "price": 10000,
+      "category": "Venda",
+      "type": "income",
+      "createdAt": "2022-10-08T11:29:49.300Z",
+      "id": 7
+    },
+    {
+      "category": "Alimentação",
+      "description": "Iogurte de bana",
+      "price": 4,
+      "type": "outcome",
+      "createdAt": "2022-10-08T11:57:05.125Z",
+      "id": 8
+    },
+    {
+      "category": "Alimentação",
+      "description": "Abacaxi",
+      "price": 10,
+      "type": "outcome",
+      "createdAt": "2022-10-08T12:09:56.291Z",
+      "id": 9
+    },
+    {
+      "category": "Venda",
+      "description": "Vendi meu carro",
+      "price": 50000,
+      "type": "income",
+      "createdAt": "2022-10-08T12:10:36.809Z",
+      "id": 10
+    },
+    {
+      "category": "Eletrônico",
+      "description": "PC Game",
+      "price": 7000,
+      "type": "outcome",
+      "createdAt": "2022-10-08T12:11:09.484Z",
+      "id": 11
     }
   ]
 }

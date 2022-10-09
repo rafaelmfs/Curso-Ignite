@@ -2,7 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
+import { useContextSelector } from 'use-context-selector'
 import * as z from 'zod'
+import { TransactionsContext } from '../../contexts/transactionsContext'
 import {
   CloseButton,
   Content,
@@ -25,18 +27,27 @@ interface NewTransactionModalProps {
 }
 
 export function NewTransactionModal({ showModal }: NewTransactionModalProps) {
+  // Use context Selector, é para selecionar qual parte específica do contexto esse componente vai utilizar.
+  // o primeiro parâmetro é o contexto e o segundo uma função que retorna as informações necessárias.
+  const createTransaction = useContextSelector(
+    TransactionsContext,
+    (context) => {
+      return context.createTransaction
+    },
+  )
   const {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
   })
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
+    await createTransaction(data)
+    reset()
     showModal(false)
   }
 
