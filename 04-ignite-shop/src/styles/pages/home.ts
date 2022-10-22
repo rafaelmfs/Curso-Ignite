@@ -1,66 +1,77 @@
-import { isAbsolute } from "path";
 import { styled } from "..";
 
 export const HomeContainer = styled('main', {
   display: 'flex',
   width: '100%',
-  maxWidth: 'calc(100vw - ((100vw - 1180px) / 2))',
-  marginLeft: 'auto',
 
-  '.swiper-button-next, .swiper-button-prev': {
-    color: 'white',
-    position: 'fixed',
-    top: '50%',
-    transform: 'translateY(-50%)',
+  'a:first-child': {
+    marginLeft: 'calc((100vw - 1180px) / 2)',
+  },
+})
 
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingRight: '1.25rem',
+export const Arrow = styled('button', {
+  position: 'absolute',
+  top: '0',
+  bottom: '0',
 
-    boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 
-    height: '100vh',
-    width: '136px',
-    background: 'linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(18, 18, 20, 0.75) 100%)',
-    transition: 'all 0.2s',
+  boxSizing: 'border-box',
+  border: 0,
+  color: '$gray300',
 
-    '&:hover': {
-      background: 'linear-gradient(rgba(18, 18, 20, 0.2), rgba(18, 18, 20, 100))',
-    }
+  width: '98px',
+  transition: 'all 0.2s',
 
+  '&:not(:disabled):hover': {
+    color: '$gray100',
+    fontWeight: 'bold',
+    cursor: 'pointer',
   },
 
-  '.swiper-button-next': {
+  '&:disabled': {
+    display: 'none',
+  },
+
+  '&.arrow-next':{
+    background: 'linear-gradient(90deg, rgba(18,18,20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)',
     right: 0,
   },
-  
-  '.swiper-button-next:after, .swiper-button-prev:after ': {
-    fontSize: '$xl',
+
+  '&.arrow-next:hover': {
+    background: 'linear-gradient(90deg, rgba(18, 18, 20, 0), rgba(18, 18, 20, 0.9))',
+
   },
 
-  '.swiper-button-prev': {
+
+  '&.arrow-prev':{
+    background: 'linear-gradient(270deg, rgba(18,18,20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)',
     left: 0,
   },
+  
+  '&.arrow-prev:hover': {
+    background: 'linear-gradient(270deg, rgba(18, 18, 20, 0), rgba(18, 18, 20, 0.9))',
 
-  '.swiper-button-disabled': {
-    display: 'none'
-  }
+  },
+
 
 })
 
-export const Product = styled('a', {
+export const Product = styled('div', {
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius: 8,
-  // padding: '0.25rem',
   cursror: 'pointer',
   position: 'relative',
+  color: '$gray100',
 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 
   overflow: 'hidden',
+  cursor: 'pointer',
 
   img: {
     objectFit: 'cover'
@@ -80,6 +91,8 @@ export const Product = styled('a', {
     justifyContent: 'space-between',
 
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backdropFilter: 'blur(8px)',
+    // background: 'rgba(12,30,45, 0.7)',
 
     transform: 'translateY(110%)',
     opacity: 0,

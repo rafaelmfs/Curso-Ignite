@@ -1,85 +1,90 @@
+import Head from 'next/head'
 import Image from "next/future/image";
+import { GetStaticProps } from "next";
+
 import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product} from "../styles/pages/home";
+import 'keen-slider/keen-slider.min.css'
 
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Navigation } from "swiper";
+import { Arrow, HomeContainer, Product} from "../styles/pages/home";
+import { stripe } from "../lib/stripe";
+import Stripe from "stripe";
+import Link from "next/link";
+import { useState } from "react";
+import { CaretLeft, CaretRight } from "phosphor-react";
 
-import 'swiper/css'
-import "swiper/css/navigation";
+interface HomeProps {
+  products: {
+    id: string
+    name: string
+    imageUrl: string
+    price: string
+  }[]
+}
 
+export default function Home({products}: HomeProps) {
 
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [sliderRef, instanceRef] = useKeenSlider({
+    slides: {
+      perView: 3,
+      spacing: 48
+    },
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel)
+    },
+  });
 
-import camiseta1 from '../assets/camisetas/1.png'
-import camiseta2 from '../assets/camisetas/2.png'
-import camiseta3 from '../assets/camisetas/3.png'
-import camiseta4 from '../assets/camisetas/4.png'
+   return (
+      <>
+        <Head>
+          <title>HOME | Ignite Shop</title>
+        </Head>
+        <HomeContainer ref={sliderRef} className="keen-slider">
+          {products.map(product => {
+            return (
+              <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
+                <Product className="keen-slider__slide">
+                  <Image src={product.imageUrl} width={520} height={480} alt={""} />
 
-export default function Home() {
-  const swiper = useSwiper();
-
-  console.log(swiper)
-
-  return (
-      <HomeContainer>
-
-        <Swiper
-          navigation={true}
-          modules={[Navigation]}
-          className="mySwiper"
-          slidesPerView={3}
-          spaceBetween={48}
-        >
-
-          <SwiperSlide>
-            <Product>
-              <Image src={camiseta1} width={520} height={480} alt={""}  />
-
-              <footer>
-                <strong>Camiseta X</strong>
-                <span>R$ 79,90</span>
-              </footer>
-            </Product>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <Product>
-              <Image src={camiseta2} width={520} height={480} alt={""}  />
-
-              <footer>
-                <strong>Camiseta X</strong>
-                <span>R$ 79,90</span>
-              </footer>
-            </Product>
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <Product>
-              <Image src={camiseta3} width={520} height={480} alt={""}  />
-
-              <footer>
-                <strong>Camiseta X</strong>
-                <span>R$ 79,90</span>
-              </footer>
-            </Product>
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <Product>
-              <Image src={camiseta4} width={520} height={480} alt={""}  />
-
-              <footer>
-                <strong>Camiseta X</strong>
-                <span>R$ 79,90</span>
-              </footer>
-            </Product>
-          </SwiperSlide>
-
-        </Swiper>
-
-
-        
-      </HomeContainer>
+                  <footer>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </footer>
+                </Product>
+              </Link>
+            )}
+          )}
+        </HomeContainer>
+        <Arrow className="arrow-next" disabled={currentSlide === products.length - 3} onClick={() => instanceRef.current.next()}><CaretRight size={32}/></Arrow>
+        <Arrow className="arrow-prev" disabled={currentSlide === 0} onClick={() => instanceRef.current.prev()}><CaretLeft size={32}/></Arrow>
+      </>
 
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await stripe.products.list({
+    expand: ['data.default_price']
+  })
+
+  const products = response.data.map((product) => {
+    const price = product.default_price as Stripe.Price
+
+    return {
+      id: product.id,
+      name: product.name,
+      imageUrl: product.images[0],
+      price: new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(price.unit_amount / 100),
+    } 
+  })
+
+  return {
+    props: {
+      products
+    },
+    revalidate: 60 * 60 * 2 //2 hours
+  }
 }
