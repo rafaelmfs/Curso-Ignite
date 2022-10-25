@@ -40,11 +40,14 @@ export const BagContainer = styled('div', {
   '& ul': {
     listStyle: 'none',
     width: '100%',
+    height: '15rem',
     marginBottom: '1rem',
 
     display: 'flex',
     flexDirection: 'column',
     gap: '1.5rem',
+
+    overflow: 'auto',
   },
 
   footer: {

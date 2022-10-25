@@ -35,6 +35,12 @@ export const SuccessContainer = styled('main', {
     }
   },
 
+  '& div.images': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+
 })
 
 export const ImageContainer = styled('div', {
@@ -51,10 +57,14 @@ export const ImageContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
 
-  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  filter: 'drop-shadow(0px 8px 4px rgba(0, 0, 0, 0.25))',
 
   img: {
     objectFit: 'cover',
   },
+
+  '&.margin-left': {
+    marginLeft: '-25%',
+  }
 
 })

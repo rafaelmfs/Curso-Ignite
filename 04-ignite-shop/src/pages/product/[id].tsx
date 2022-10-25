@@ -1,11 +1,9 @@
-import axios from "axios"
 import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/future/image"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import Stripe from "stripe"
-import { AddToBagButton } from "../../components/AddToBagButton"
+import { useShoppingCart } from "use-shopping-cart"
 import { stripe } from "../../lib/stripe"
 import { ImageContaner, ProductContainer, ProductDetails } from "../../styles/pages/product"
 
@@ -14,7 +12,7 @@ interface ProductProps {
     id: string
     name: string
     imageUrl: string
-    price: string,
+    price: number,
     description: string
     defaultPriceId: string
   } 
@@ -22,24 +20,18 @@ interface ProductProps {
 
 export default function Product({product}: ProductProps){
   const { isFallback } = useRouter()
-  const [isCreatingChechoutSession, setIsCreatingChechoutSession] = useState(false)
+  const { addItem, handleCartHover } = useShoppingCart()
+  const price = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(product.price / 100)
 
-  async function hendleBuyProduct(){
-    try{
-      setIsCreatingChechoutSession(true)
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId
-      })
-
-      const { checkoutURL } = response.data
-
-      window.location.href = checkoutURL
-    }catch(err){
-      //Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-      setIsCreatingChechoutSession(false)
-
-      alert('falha ao redirecionar ao checkout!!!')
-    }
+  function handleAddBagItem(){
+    addItem({
+      ...product, 
+      currency: "BRL"
+    })
+    handleCartHover()
   }
 
   if(isFallback){
@@ -59,11 +51,13 @@ export default function Product({product}: ProductProps){
 
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{price}</span>
 
           <p>{product.description}</p>
 
-          <AddToBagButton home={false} disabled={isCreatingChechoutSession} onClick={hendleBuyProduct} />
+          <button onClick={handleAddBagItem}>
+            Colocar na sacola
+          </button>
         </ProductDetails>
       </ProductContainer>
     </>
@@ -94,10 +88,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
         id:product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }).format(price.unit_amount / 100),
+        price: price.unit_amount,
         description: product.description,
         defaultPriceId: price.id,
       }

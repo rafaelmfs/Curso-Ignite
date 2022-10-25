@@ -10,15 +10,14 @@ import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 import Link from "next/link";
 import { useState } from "react";
-import { CaretLeft, CaretRight } from "phosphor-react";
-import { AddToBagButton } from '../components/AddToBagButton';
+import { CaretLeft, CaretRight, Handbag } from "phosphor-react";
 
 interface HomeProps {
   products: {
     id: string
     name: string
     imageUrl: string
-    price: string
+    price: number
   }[]
 }
 
@@ -42,6 +41,10 @@ export default function Home({products}: HomeProps) {
         </Head>
         <HomeContainer ref={sliderRef} className="keen-slider">
           {products.map(product => {
+            const price = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(product.price)
             return (
               <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
                 <Product className="keen-slider__slide">
@@ -50,9 +53,11 @@ export default function Home({products}: HomeProps) {
                   <footer>
                     <div>
                       <strong>{product.name}</strong>
-                      <span>{product.price}</span>
+                      <span>{price}</span>
                     </div>
-                    <AddToBagButton home />
+                    <div className='bag'>
+                      <Handbag weight="bold" size={32} />
+                    </div>
                   </footer>
                 </Product>
               </Link>
@@ -78,10 +83,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(price.unit_amount / 100),
+      price: price.unit_amount / 100,
     } 
   })
 

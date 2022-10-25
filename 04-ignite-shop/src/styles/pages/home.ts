@@ -110,6 +110,18 @@ export const Product = styled('div', {
       lineHeight: 1.4,
       color: '$green300',
     },
+
+    'div.bag': {
+      backgroundColor: '$green500',
+      border: 0,
+      color: '$white',
+      borderRadius: 8,
+      padding: '0.75rem',
+      fontWeight: 'bold',
+      fontSize: '$md',
+
+      cursor: 'pointer',
+    }
   },
 
   '&:hover': {
