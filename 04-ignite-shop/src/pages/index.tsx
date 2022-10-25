@@ -11,6 +11,7 @@ import Stripe from "stripe";
 import Link from "next/link";
 import { useState } from "react";
 import { CaretLeft, CaretRight } from "phosphor-react";
+import { AddToBagButton } from '../components/AddToBagButton';
 
 interface HomeProps {
   products: {
@@ -47,8 +48,11 @@ export default function Home({products}: HomeProps) {
                   <Image src={product.imageUrl} width={520} height={480} alt={""} />
 
                   <footer>
-                    <strong>{product.name}</strong>
-                    <span>{product.price}</span>
+                    <div>
+                      <strong>{product.name}</strong>
+                      <span>{product.price}</span>
+                    </div>
+                    <AddToBagButton home />
                   </footer>
                 </Product>
               </Link>

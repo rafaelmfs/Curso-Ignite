@@ -28,7 +28,6 @@ export const Arrow = styled('button', {
   '&:not(:disabled):hover': {
     color: '$gray100',
     fontWeight: 'bold',
-    cursor: 'pointer',
   },
 
   '&:disabled': {
@@ -82,7 +81,7 @@ export const Product = styled('div', {
     bottom: '0.25rem',
     left: '0.25rem',
     right: '0.25rem',
-    padding: '2rem',
+    padding: '1.25rem',
 
     borderRadius: 6,
 
@@ -100,14 +99,16 @@ export const Product = styled('div', {
 
     'strong': {
       fontSize: '$lg',
+      lineHeight: 1.6,
+      display: 'block',
 
     },
 
     span: {
-      fontSize: 'xl',
+      fontSize: '$xl',
       fontWeight: 'bold',
+      lineHeight: 1.4,
       color: '$green300',
-
     },
   },
 

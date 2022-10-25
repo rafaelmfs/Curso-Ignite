@@ -5,6 +5,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Stripe from "stripe"
+import { AddToBagButton } from "../../components/AddToBagButton"
 import { stripe } from "../../lib/stripe"
 import { ImageContaner, ProductContainer, ProductDetails } from "../../styles/pages/product"
 
@@ -62,7 +63,7 @@ export default function Product({product}: ProductProps){
 
           <p>{product.description}</p>
 
-          <button disabled={isCreatingChechoutSession} onClick={hendleBuyProduct}>Comprar Agora</button>
+          <AddToBagButton home={false} disabled={isCreatingChechoutSession} onClick={hendleBuyProduct} />
         </ProductDetails>
       </ProductContainer>
     </>
