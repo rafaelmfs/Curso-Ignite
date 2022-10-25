@@ -35,23 +35,36 @@ export const SuccessContainer = styled('main', {
     }
   },
 
+  '& div.images': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+
 })
 
 export const ImageContainer = styled('div', {
   width: '100%',
   maxWidth: 130,
-  height: 145,
+  height: 132,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
+  borderRadius: '50%',
   padding: '0.25rem',
   marginTop: '4rem',
+  marginBottom: '2rem',
 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 
+  filter: 'drop-shadow(0px 8px 4px rgba(0, 0, 0, 0.25))',
+
   img: {
     objectFit: 'cover',
   },
+
+  '&.margin-left': {
+    marginLeft: '-25%',
+  }
 
 })

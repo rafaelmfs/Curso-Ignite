@@ -6,6 +6,7 @@ export const Container = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'center',
   minHeight: '100vh',
+
 })
 
 export const Header = styled('header', {
@@ -13,4 +14,13 @@ export const Header = styled('header', {
   width: '100%',
   maxWidth: 1180,
   margin: '0 auto',
+  
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+
+  '&.success-page': {
+    justifyContent: 'center',
+  },
 })
+
